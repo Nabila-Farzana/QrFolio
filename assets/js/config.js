@@ -8,9 +8,9 @@ window.QR_CONFIG = {
 
   google: {
     // Google Cloud console > APIs & Services > Credentials > API key.
-    apiKey: '',
+    apiKey: 'AIzaSyAzQQYdmJTfS6iLjhQqKy4KjhDs7_sGLtU',
     // Google Cloud console > APIs & Services > Credentials > OAuth 2.0 Client ID (Web application).
-    clientId: '',
+    clientId: '1024192762010-h1fr6cufc9anvrhmpgnqe3jq2o0puf5c.apps.googleusercontent.com',
     // Google Cloud console > project settings > Project number.
     appId: '1024192762010',
   },
