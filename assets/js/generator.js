@@ -183,7 +183,8 @@
     setTimeout(() => { editButton.textContent = label; }, 1500);
   });
 
-  document.getElementById('reset').addEventListener('click', () => {
+  // The button id must not be "reset", because a form control shadows form.reset.
+  document.getElementById('clear-form').addEventListener('click', () => {
     form.reset();
     filesBox.replaceChildren();
     addFileRow();
