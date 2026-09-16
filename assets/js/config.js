@@ -4,7 +4,7 @@
 // README.md gives the setup steps.
 window.QR_CONFIG = {
   // Dropbox App Console > your app > Settings > App key.
-  dropboxAppKey: '',
+  dropboxAppKey: 'p66sh65zmudrx3s',
 
   google: {
     // Google Cloud console > APIs & Services > Credentials > API key.
