@@ -246,6 +246,11 @@
       ]));
     }
 
+    sections.push(el('p', { className: 'profile-note' }, [
+      el('span', { text: 'This profile comes from the QR code. QrFolio shows it, but does not check it. ' }),
+      el('a', { href: 'index.html', text: 'Make your own QR code' }),
+    ]));
+
     app.replaceChildren(...sections);
   }
 

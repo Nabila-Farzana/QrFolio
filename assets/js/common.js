@@ -52,7 +52,11 @@
     return btoa(binary).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
   }
 
+  // A QR code holds about 3 kilobytes, so a longer link comes from a person, not from a scan.
+  const MAX_DATA = 8192;
+
   function decode(text) {
+    if (text.length > MAX_DATA) throw new Error('The profile link is too long.');
     let b64 = text.replace(/-/g, '+').replace(/_/g, '/');
     while (b64.length % 4) b64 += '=';
     const bytes = Uint8Array.from(atob(b64), (char) => char.charCodeAt(0));
@@ -84,7 +88,10 @@
     if (!HAS_SCHEME.test(text) && /^(www\.|[\w-]+(\.[\w-]+)+\/)/i.test(text)) text = 'https://' + text;
     try {
       const url = new URL(text, base);
-      return ['http:', 'https:', 'mailto:', 'tel:'].includes(url.protocol) ? url.href : null;
+      if (!['http:', 'https:', 'mailto:', 'tel:'].includes(url.protocol)) return null;
+      // A link with a user name or a password can hide the real host from a reader.
+      if (url.username || url.password) return null;
+      return url.href;
     } catch (error) {
       return null;
     }
