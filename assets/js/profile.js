@@ -99,10 +99,17 @@
       sections.push(el('section', { className: 'card' }, [el('p', { className: 'bio', text: profile.bio })]));
     }
 
+    if (profile.notes) {
+      sections.push(el('section', { className: 'card' }, [
+        el('h2', { text: 'More information' }),
+        el('p', { className: 'bio', text: profile.notes }),
+      ]));
+    }
+
     const cards = profile.files.map(fileCard).filter(Boolean);
     if (cards.length) {
       sections.push(el('section', { className: 'card' }, [
-        el('h2', { text: 'Designs' }),
+        el('h2', { text: 'Attachments' }),
         el('div', { className: 'file-grid' }, cards),
       ]));
     }

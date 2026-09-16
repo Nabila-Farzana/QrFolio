@@ -4,14 +4,14 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>QR Profile Generator</title>
-  <meta name="description" content="Make a QR code that opens a contact profile with design files.">
+  <meta name="description" content="Make a QR code that opens a contact profile with attachments.">
   <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
   <header class="site-header">
     <div class="wrap">
       <h1>QR Profile Generator</h1>
-      <p class="lead">Make a QR code that opens a contact profile with design files.</p>
+      <p class="lead">Make a QR code that opens your contact profile with your attachments.</p>
     </div>
   </header>
 
@@ -19,7 +19,7 @@
     <form id="form" class="card" autocomplete="off">
       <h2><span class="step">1</span> Details</h2>
       <div class="fields">
-        <label>Full name <input name="name" required></label>
+        <label><span class="field-name">Full name <span class="need">needed</span></span> <input name="name" required></label>
         <label>Title <input name="title" placeholder="Architect"></label>
         <label>Company or studio <input name="company"></label>
         <label>Phone <input name="phone" type="tel" placeholder="+880 1XXX XXXXXX"></label>
@@ -27,11 +27,16 @@
         <label>Website <input name="website" placeholder="example.com"></label>
         <label class="wide">Address <input name="address"></label>
         <label class="wide">Short bio <textarea name="bio" rows="3"></textarea></label>
+        <label class="wide">More information (optional)
+          <textarea name="notes" rows="3" placeholder="Office hours, services, licence number, languages, or any other detail"></textarea>
+        </label>
       </div>
+      <p class="hint">Write a name, and give at least one contact: a phone number, an email address, or a website.</p>
 
-      <h2><span class="step">2</span> Design files</h2>
+      <h2><span class="step">2</span> Attachments</h2>
       <p class="hint">
-        Choose files from your Google Drive or Dropbox, or paste a share link.
+        Add your files, for example a portfolio, a price list, a certificate, or photos.
+        Choose them from your Google Drive or Dropbox, or paste a link.
         The files stay in your own account. This site does not store them.
       </p>
       <div class="pickers">
@@ -41,18 +46,22 @@
       <p id="picker-status" class="picker-status" role="status" hidden></p>
       <div id="files"></div>
       <button type="button" id="add-file" class="btn ghost small">+ Add link</button>
+      <p class="hint small-top">
+        Use a public link only. Every person who scans the QR code must open the file with no login.
+        Test each link in a private browser window.
+      </p>
 
       <h2><span class="step">3</span> QR code type</h2>
       <div class="choices">
         <label class="choice">
           <input type="radio" name="mode" value="link" checked>
           <span><strong>Profile page</strong>
-            <small>Shows the details and the files. The QR code holds all of the data. New data needs a new QR code.</small></span>
+            <small>Shows the details and the attachments. The QR code holds all of the data. New data needs a new QR code.</small></span>
         </label>
         <label class="choice">
           <input type="radio" name="mode" value="vcard">
           <span><strong>Contact card only</strong>
-            <small>The phone saves the contact directly and needs no internet. No design files.</small></span>
+            <small>The phone saves the contact directly and needs no internet. No attachments.</small></span>
         </label>
       </div>
 
@@ -94,7 +103,7 @@
 
   <template id="file-row">
     <div class="file-row">
-      <input class="f-label" placeholder="Label, for example Villa plan" aria-label="File label">
+      <input class="f-label" placeholder="Label, for example Portfolio" aria-label="File label">
       <input class="f-url" placeholder="https://drive.google.com/..." aria-label="File link">
       <button type="button" class="btn ghost icon remove" aria-label="Remove file">&times;</button>
     </div>

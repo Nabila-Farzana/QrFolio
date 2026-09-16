@@ -206,3 +206,8 @@ input[type="color"] { padding: 0.2rem; height: 2.3rem; background: #ffffff; curs
 
 .site-footer { padding: 0 1rem 2.5rem; font-size: 0.85rem; }
 .site-footer a { color: var(--muted); }
+
+.need { color: var(--accent); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.06em; }
+.btn.is-disabled { opacity: 0.5; pointer-events: none; }
+
+.field-name { display: flex; align-items: baseline; gap: 0.4rem; }

@@ -1,7 +1,7 @@
 # QR Profile Generator
 
 A static web page that makes a QR code for a contact profile.
-The profile shows a name, contact details, and design files (PDF and images).
+The profile shows a name, contact details, and attachments (PDF, images, and links).
 It runs on GitHub Pages and needs no server. It saves no data.
 
 ## How it works
@@ -9,7 +9,7 @@ It runs on GitHub Pages and needs no server. It saves no data.
 ```mermaid
 flowchart LR
   G[index.html<br/>generator] -->|QR code with data in #fragment| P[profile.html]
-  P --> F[files/ or Drive links]
+  P --> F[Drive, Dropbox, or other public links]
   G -->|edit link index.html#data| G
 ```
 
@@ -20,7 +20,9 @@ The browser does not send the fragment to the server, and the site stores nothin
 The generator gives two QR code types:
 
 1. **Profile page.** The QR code holds all the data. A change needs a new QR code.
-2. **Contact card only.** The QR code holds a vCard. The phone saves the contact. No files.
+2. **Contact card only.** The QR code holds a vCard. The phone saves the contact. No attachments.
+
+The generator needs a name and at least one contact: a phone number, an email address, or a website.
 
 To edit a profile later, keep the **edit link** from the generator. It fills the form again. Then download the new QR code.
 
@@ -47,9 +49,9 @@ The repository is `Nabila-Farzana/QrFolio`, and it must stay public. GitHub Page
 2. On GitHub, open **Settings > Pages**. Set **Source** to `Deploy from a branch`, branch `main`, folder `/ (root)`.
 3. After about one minute, open `https://nabila-farzana.github.io/QrFolio/`.
 
-## Design files
+## Attachments
 
-A person adds files in one of three ways. All three are optional.
+A person adds attachments in one of three ways. All three are optional.
 
 1. **Choose from Google Drive.** The person logs in, then selects or uploads files. The page asks before it shares the files with "Anyone with the link".
 2. **Choose from Dropbox.** The person selects files. Dropbox makes a share link for each file.
@@ -77,16 +79,16 @@ A button shows only when its keys are in `assets/js/config.js`. The keys are pub
 
 The `drive.file` scope lets the site use only the files that the person selects or uploads.
 
-This repository hosts no design files, by design. The code accepts only a full `https` link to another site, and `.gitignore` blocks a local `files/` folder. So private work cannot reach this public repository by mistake.
+This repository hosts no attachments, by design. The code accepts only a full `https` link to another site, and `.gitignore` blocks a local `files/` folder. So private work cannot reach this public repository by mistake.
 
 ## Notes
 
 - Make the QR code on the GitHub Pages address, not from a local file. The QR code holds the page address.
 - Test the QR code with a phone before you print it.
 - All data on the site is public. Do not add private information.
+- To test on your computer, run `python3 -m http.server 8000` in this folder and open `http://localhost:8000`. Use port 8000, because the Google keys allow that port only.
 - `assets/vendor/qrcode.min.js` is [qrcode-generator](https://github.com/kazuhikoarase/qrcode-generator) 1.4.4 by Kazuhiko Arase. Its license is in `assets/vendor/LICENSE-qrcode-generator.txt`.
 
 ## License
 
 MIT. See `LICENSE`.
-- To test on your computer, run `python3 -m http.server` in this folder and open `http://localhost:8000`.

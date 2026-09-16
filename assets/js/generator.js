@@ -59,13 +59,31 @@
     return text.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'profile';
   }
 
+  // A QR code without a name and one contact is of no use to the person who scans it.
+  function missingParts(profile) {
+    const missing = [];
+    if (!profile.name) missing.push('Write the full name.');
+    if (!profile.phone && !profile.email && !profile.website) {
+      missing.push('Give at least one contact: a phone number, an email address, or a website.');
+    }
+    return missing;
+  }
+
   function update() {
     const profile = readProfile();
     const mode = form.elements.mode.value;
     const encoded = Q.encode(profile);
     const text = mode === 'vcard' ? Q.vcard(profile) : profileBase + '#' + encoded;
 
-    const messages = [];
+    const messages = missingParts(profile);
+    if (messages.length) {
+      current = null;
+      canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height);
+      info.textContent = 'The QR code starts here.';
+      showMessages(messages);
+      setButtons(false, mode);
+      return;
+    }
     try {
       current = { qr: Q.makeQR(text, levelInput.value), text, profile, editLink: editBase + '#' + encoded };
     } catch (error) {
@@ -83,29 +101,36 @@
       messages.push('The data is too long for a QR code. Remove some text or some files.');
     }
 
-    if (!profile.name) messages.push('Write a name.');
     // This site hosts no files. Every file must stay in the storage of its owner.
     if (profile.files.some((file) => !/^https:\/\//i.test(file.url))) {
       messages.push('Each file link must start with "https://". This site does not store files.');
     }
     if (mode === 'vcard' && profile.files.length) {
-      messages.push('A contact card cannot hold design files. Choose the profile page type to show the files.');
+      messages.push('A contact card cannot hold attachments. Choose the profile page type to show them.');
     }
     if (location.protocol === 'file:') {
       messages.push('This page runs from a local file. Open it from the GitHub Pages address before you print the QR code.');
     }
     if (isLightColor(colorInput.value)) messages.push('Use a dark color. Scanners cannot read light QR codes well.');
 
+    showMessages(messages);
+    openLink.href = mode === 'vcard' ? '#' : text;
+    setButtons(Boolean(current), mode);
+  }
+
+  function showMessages(messages) {
     warnings.replaceChildren(...messages.map((message) => {
       const item = document.createElement('li');
       item.textContent = message;
       return item;
     }));
     warnings.hidden = messages.length === 0;
+  }
 
+  function setButtons(ready, mode) {
+    pngButton.disabled = svgButton.disabled = editButton.disabled = !ready;
     openLink.hidden = mode === 'vcard';
-    openLink.href = mode === 'vcard' ? '#' : text;
-    pngButton.disabled = svgButton.disabled = editButton.disabled = !current;
+    openLink.classList.toggle('is-disabled', !ready);
   }
 
   // An edit link (index.html#data) fills the form again. Nothing comes from storage.

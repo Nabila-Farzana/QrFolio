@@ -2,10 +2,13 @@
 (function (global) {
   'use strict';
 
-  const FIELDS = ['name', 'title', 'company', 'phone', 'email', 'website', 'address', 'bio'];
+  const FIELDS = ['name', 'title', 'company', 'phone', 'email', 'website', 'address', 'bio', 'notes'];
 
   // Short keys keep the data in the QR link small.
-  const SHORT = { name: 'n', title: 't', company: 'c', phone: 'p', email: 'e', website: 'w', address: 'a', bio: 'b' };
+  const SHORT = {
+    name: 'n', title: 't', company: 'c', phone: 'p',
+    email: 'e', website: 'w', address: 'a', bio: 'b', notes: 'i',
+  };
 
   const IMAGE_EXT = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg', 'avif'];
 
@@ -139,7 +142,8 @@
     if (profile.email) lines.push('EMAIL;TYPE=INTERNET:' + escapeVcard(profile.email));
     if (profile.website) lines.push('URL:' + normalizeWebsite(profile.website));
     if (profile.address) lines.push('ADR;TYPE=WORK:;;' + escapeVcard(profile.address) + ';;;;');
-    if (profile.bio) lines.push('NOTE:' + escapeVcard(profile.bio));
+    const note = [profile.bio, profile.notes].filter(Boolean).join('\n');
+    if (note) lines.push('NOTE:' + escapeVcard(note));
     lines.push('END:VCARD');
     return lines.join('\r\n');
   }
