@@ -1,0 +1,4 @@
+.DS_Store
+
+# This project never hosts files. Keep any local folder of design files out of the repository.
+files/

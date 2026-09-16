@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>QR Profile Generator</title>
+  <meta name="description" content="Make a QR code that opens a contact profile with design files.">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap">
+      <h1>QR Profile Generator</h1>
+      <p class="lead">Make a QR code that opens a contact profile with design files.</p>
+    </div>
+  </header>
+
+  <main class="wrap layout">
+    <form id="form" class="card" autocomplete="off">
+      <h2><span class="step">1</span> Details</h2>
+      <div class="fields">
+        <label>Full name <input name="name" required></label>
+        <label>Title <input name="title" placeholder="Architect"></label>
+        <label>Company or studio <input name="company"></label>
+        <label>Phone <input name="phone" type="tel" placeholder="+880 1XXX XXXXXX"></label>
+        <label>Email <input name="email" type="email"></label>
+        <label>Website <input name="website" placeholder="example.com"></label>
+        <label class="wide">Address <input name="address"></label>
+        <label class="wide">Short bio <textarea name="bio" rows="3"></textarea></label>
+      </div>
+
+      <h2><span class="step">2</span> Design files</h2>
+      <p class="hint">
+        Choose files from your Google Drive or Dropbox, or paste a share link.
+        The files stay in your own account. This site does not store them.
+      </p>
+      <div class="pickers">
+        <button type="button" id="pick-drive" class="btn ghost small" hidden>Choose from Google Drive</button>
+        <button type="button" id="pick-dropbox" class="btn ghost small" hidden>Choose from Dropbox</button>
+      </div>
+      <p id="picker-status" class="picker-status" role="status" hidden></p>
+      <div id="files"></div>
+      <button type="button" id="add-file" class="btn ghost small">+ Add link</button>
+
+      <h2><span class="step">3</span> QR code type</h2>
+      <div class="choices">
+        <label class="choice">
+          <input type="radio" name="mode" value="link" checked>
+          <span><strong>Profile page</strong>
+            <small>Shows the details and the files. The QR code holds all of the data. New data needs a new QR code.</small></span>
+        </label>
+        <label class="choice">
+          <input type="radio" name="mode" value="vcard">
+          <span><strong>Contact card only</strong>
+            <small>The phone saves the contact directly and needs no internet. No design files.</small></span>
+        </label>
+      </div>
+
+      <button type="button" id="reset" class="btn ghost small">Clear all fields</button>
+    </form>
+
+    <aside class="card preview">
+      <h2>Preview</h2>
+      <div class="qr-box"><canvas id="qr" width="640" height="640" aria-label="QR code preview"></canvas></div>
+      <p id="qr-info" class="hint center"></p>
+      <ul id="qr-warn" class="warn" hidden></ul>
+      <div class="options">
+        <label>Color <input type="color" id="fg" value="#1f2328"></label>
+        <label>Error correction
+          <select id="ecl">
+            <option value="L">Low (7%)</option>
+            <option value="M" selected>Medium (15%)</option>
+            <option value="Q">High (25%)</option>
+            <option value="H">Maximum (30%)</option>
+          </select>
+        </label>
+      </div>
+      <div class="actions">
+        <button type="button" class="btn" id="dl-png">Download PNG</button>
+        <button type="button" class="btn ghost" id="dl-svg">Download SVG</button>
+        <a class="btn ghost" id="open-profile" target="_blank" rel="noopener">Open profile</a>
+        <button type="button" class="btn ghost" id="copy-edit">Copy edit link</button>
+      </div>
+      <p class="hint small-top">
+        This site saves no data. Keep the edit link to change the profile later.
+        The edit link fills the form again, and you can then make a new QR code.
+      </p>
+    </aside>
+  </main>
+
+  <footer class="wrap site-footer">
+    <a href="privacy.html">Privacy</a>
+  </footer>
+
+  <template id="file-row">
+    <div class="file-row">
+      <input class="f-label" placeholder="Label, for example Villa plan" aria-label="File label">
+      <input class="f-url" placeholder="https://drive.google.com/..." aria-label="File link">
+      <button type="button" class="btn ghost icon remove" aria-label="Remove file">&times;</button>
+    </div>
+  </template>
+
+  <script src="assets/vendor/qrcode.min.js"></script>
+  <script src="assets/js/common.js"></script>
+  <script src="assets/js/generator.js"></script>
+  <script src="assets/js/config.js"></script>
+  <script src="assets/js/pickers.js"></script>
+</body>
+</html>
