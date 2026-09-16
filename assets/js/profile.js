@@ -162,11 +162,42 @@
     return wrap;
   }
 
+  // The line under the name. The company name links to the company site,
+  // and the logo links to the company page on LinkedIn.
+  function companyLine(profile) {
+    if (!profile.title && !profile.company) return null;
+    const line = el('p', { className: 'subtitle' });
+    if (profile.title) line.append(profile.title);
+    if (profile.title && profile.company) line.append(', ');
+
+    if (profile.company) {
+      const site = Q.safeUrl(Q.normalizeWebsite(profile.companySite));
+      if (site) {
+        line.append(el('a', {
+          className: 'company-link', href: site, target: '_blank', rel: 'noopener', text: profile.company,
+        }));
+      } else {
+        line.append(profile.company);
+      }
+    }
+
+    const page = Q.safeUrl(Q.linkedinUrl(profile.companyLinkedin, 'company'));
+    if (page) {
+      const link = el('a', {
+        className: 'company-badge', href: page, target: '_blank', rel: 'noopener',
+        'aria-label': (profile.company || 'Company') + ' on LinkedIn',
+        title: 'LinkedIn page',
+      }, [brandIcon(LINKEDIN_PATH)]);
+      line.append(' ', link);
+    }
+    return line;
+  }
+
   function render(profile) {
     if (!profile.name) throw new Error('The profile has no name.');
     document.title = profile.name + (profile.title ? ' | ' + profile.title : '');
 
-    const subtitle = [profile.title, profile.company].filter(Boolean).join(', ');
+    const subtitle = companyLine(profile);
     const phone = profile.phone.replace(/[^\d+]/g, '');
     const website = Q.safeUrl(Q.normalizeWebsite(profile.website));
     const linkedin = Q.safeUrl(Q.linkedinUrl(profile.linkedin));
@@ -181,7 +212,7 @@
       el('div', { className: 'avatar', text: initials(profile.name), 'aria-hidden': 'true' }),
       el('div', {}, [
         el('h1', { text: profile.name }),
-        subtitle ? el('p', { className: 'subtitle', text: subtitle }) : null,
+        subtitle,
         profile.address ? el('p', { className: 'address', text: profile.address }) : null,
       ]),
     ]);

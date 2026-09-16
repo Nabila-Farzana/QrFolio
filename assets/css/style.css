@@ -259,3 +259,9 @@ input[type="color"] { padding: 0.2rem; height: 2.3rem; background: #ffffff; curs
   cursor: pointer;
 }
 .menu-item:hover { background: var(--bg); color: var(--accent); }
+
+.company-link { color: var(--text); text-decoration: none; border-bottom: 1px solid var(--line); }
+.company-link:hover { color: var(--accent); border-bottom-color: var(--accent); }
+.company-badge { display: inline-flex; vertical-align: -0.15em; color: var(--muted); }
+.company-badge:hover { color: var(--accent); }
+.company-badge .btn-icon { width: 1em; height: 1em; }
