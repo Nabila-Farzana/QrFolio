@@ -2,12 +2,12 @@
 (function (global) {
   'use strict';
 
-  const FIELDS = ['name', 'title', 'company', 'phone', 'email', 'website', 'address', 'bio', 'notes'];
+  const FIELDS = ['name', 'title', 'company', 'phone', 'email', 'website', 'linkedin', 'address', 'bio', 'notes'];
 
   // Short keys keep the data in the QR link small.
   const SHORT = {
-    name: 'n', title: 't', company: 'c', phone: 'p',
-    email: 'e', website: 'w', address: 'a', bio: 'b', notes: 'i',
+    name: 'n', title: 't', company: 'c', phone: 'p', email: 'e',
+    website: 'w', linkedin: 'l', address: 'a', bio: 'b', notes: 'i',
   };
 
   const IMAGE_EXT = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg', 'avif'];
@@ -62,6 +62,14 @@
     const text = (value || '').trim();
     if (!text) return '';
     return HAS_SCHEME.test(text) ? text : 'https://' + text;
+  }
+
+  // Accepts a full link, "linkedin.com/in/name", or only the user name.
+  function linkedinUrl(value) {
+    const text = (value || '').trim().replace(/^@/, '');
+    if (!text) return '';
+    if (HAS_SCHEME.test(text) || /linkedin\.com/i.test(text)) return normalizeWebsite(text);
+    return 'https://www.linkedin.com/in/' + encodeURIComponent(text);
   }
 
   // Returns an absolute http, https, mailto, or tel URL. Returns null for other schemes.
@@ -123,6 +131,22 @@
     return url;
   }
 
+  // A short name of the place that holds the file, for the second line of a card.
+  function sourceName(url) {
+    try {
+      const host = new URL(url).hostname.replace(/^www\./, '');
+      if (/(^|\.)google\.com$/.test(host)) return 'Google Drive';
+      if (/(^|\.)dropbox\.com$/.test(host)) return 'Dropbox';
+      if (/(^|\.)onedrive\.live\.com$|sharepoint\.com$/.test(host)) return 'OneDrive';
+      if (/(^|\.)notion\.(so|site)$/.test(host)) return 'Notion';
+      if (/(^|\.)behance\.net$/.test(host)) return 'Behance';
+      if (/(^|\.)linkedin\.com$/.test(host)) return 'LinkedIn';
+      return host;
+    } catch (error) {
+      return '';
+    }
+  }
+
   function escapeVcard(value) {
     return String(value)
       .replace(/\\/g, '\\\\')
@@ -141,6 +165,7 @@
     if (profile.phone) lines.push('TEL;TYPE=CELL:' + escapeVcard(profile.phone));
     if (profile.email) lines.push('EMAIL;TYPE=INTERNET:' + escapeVcard(profile.email));
     if (profile.website) lines.push('URL:' + normalizeWebsite(profile.website));
+    if (profile.linkedin) lines.push('X-SOCIALPROFILE;TYPE=linkedin:' + linkedinUrl(profile.linkedin));
     if (profile.address) lines.push('ADR;TYPE=WORK:;;' + escapeVcard(profile.address) + ';;;;');
     const note = [profile.bio, profile.notes].filter(Boolean).join('\n');
     if (note) lines.push('NOTE:' + escapeVcard(note));
@@ -201,7 +226,7 @@
   }
 
   global.QRProfile = {
-    FIELDS, normalize, encode, decode, normalizeWebsite, safeUrl, fileUrl, fileKind, driveFileId, previewUrl,
+    FIELDS, normalize, encode, decode, normalizeWebsite, linkedinUrl, safeUrl, fileUrl, fileKind, driveFileId, previewUrl, sourceName,
     vcard, makeQR, drawCanvas, toSvg, download,
   };
 })(typeof window !== 'undefined' ? window : globalThis);
