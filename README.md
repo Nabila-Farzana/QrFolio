@@ -26,28 +26,6 @@ The generator needs a name and at least one contact: a phone number, an email ad
 
 To edit a profile later, keep the **edit link** from the generator. It fills the form again. Then download the new QR code.
 
-## Publish on GitHub Pages
-
-The repository is `Nabila-Farzana/QrFolio`, and it must stay public. GitHub Pages needs a paid plan for a private repository.
-
-1. In this folder, set the personal git identity for this repository only, then push:
-
-   ```sh
-   git init -b main
-   git config user.name "Nabila Farzana"
-   git config user.email "nabila.ruet12@gmail.com"
-   git config user.email          # must print the personal email
-   git add .
-   git commit -m "Add QrFolio QR profile generator"
-   git remote add origin https://github.com/Nabila-Farzana/QrFolio.git
-   gh auth switch --user Nabila-Farzana
-   git push -u origin main
-   ```
-
-   The remote uses HTTPS, because the SSH key on this machine belongs to the work account.
-
-2. On GitHub, open **Settings > Pages**. Set **Source** to `Deploy from a branch`, branch `main`, folder `/ (root)`.
-3. After about one minute, open `https://nabila-farzana.github.io/QrFolio/`.
 
 ## Attachments
 
